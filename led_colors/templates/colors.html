@@ -1,0 +1,19 @@
+{% include "head.html" %}
+<style>
+    .color-rect {
+        height:1em;
+        width:100%;
+        background-color: #{{profile.color}};
+        border-radius:7px;
+    }
+</style>
+<div class="content">
+<h1>Colors:</h1>
+<a class="button" href="/leds/color/create"><span>new</span></a>
+{% for profile in profiles %}
+<h3 class="color-name"><a href="color/{{profile.name}}">{{profile.name}}</a></h3>
+<p class="label">Color: {{ profile.color }}</p>
+<div class="color-rect" style="background-color:#{{profile.color}};"></div>
+{% endfor %}
+</div>
+{% include "footer.html" %}

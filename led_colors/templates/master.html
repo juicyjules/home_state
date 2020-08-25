@@ -1,0 +1,104 @@
+{% include "head.html" %}
+<style>
+    .color-picker {
+        width:100%;
+    }
+    .pickr .pcr-button {
+        margin-top:0.5em!important;
+        width:100%!important;
+    }
+    .pcr-app[data-theme=classic] {
+        max-width:80vw!important;
+        width:100%!important;
+    }
+    .pcr-app {
+        box-shadow: none!important;
+    }
+    .content {
+        max-width:80vw!important;
+    }
+    .off {
+        filter: grayscale(90);
+    }
+</style>
+<div class="content">
+<h1>Master</h1>
+{% if client.on %}
+<button onclick="toggleOn(this,'master')" class="button on">
+On
+</button>
+{% else %}
+<button onclick="toggleOn(this,'master')" class="button off">
+Off
+</button>
+{% endif %}
+<div class="color-picker"></div>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'monolith' theme -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script>
+var cur_color = "{{color}}"
+var on = {% if all_on %} true {% else %} false {% endif %}
+var CSRF_TOKEN = '{{ csrf_token }}'
+const pickr = Pickr.create({
+    el: '.color-picker',
+    theme: 'classic', // or 'monolith', or 'nano'
+
+    swatches: [
+    ],           
+    default: "#{{color}}",
+    inline:true,
+    showAlways:true,
+    position:"bottom-middle",
+    components: {
+
+        // Main components
+        preview: true,
+        opacity: true,
+        hue: true,
+
+        // Input / output Options
+        interaction: {
+            input: true,
+            clear: true,
+        }
+    }
+});
+pickr.on('change', (color,instance) => {
+    c = color.toHEXA()
+    document.getElementsByClassName("pcr-button")[0].style.color = c
+    cur_color = c
+});
+pickr.on('changestop', (instance) => {
+    updateColor(cur_color.toString())
+});
+var updateColor = function(color){
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '{{url}}', true);
+    xhr.withCredentials = true;
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-CSRFToken', CSRF_TOKEN),
+    xhr.send('color='+color);
+}
+
+var toggleOn = function(btn,url){
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-CSRFToken', CSRF_TOKEN),
+    on = !on
+    xhr.send('on='+ ( on ? "True" : "False" ));
+    xhr.onload = function () {
+        if(on){
+            btn.innerHTML = "On"
+            btn.classList.remove("off")
+            btn.classList.add("on")
+        } else {
+            btn.innerHTML = "Off"
+            btn.classList.remove("on")
+            btn.classList.add("off")
+        }
+    };
+};
+</script>
+{% include "footer.html" %}

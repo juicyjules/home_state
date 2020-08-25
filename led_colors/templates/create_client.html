@@ -1,0 +1,57 @@
+
+{% include "head.html" %}
+<style>
+    .colored  {
+       border-radius: 7px;
+       height:2em;
+       width:100%;
+       padding-left:1em;
+       padding-right:1em;
+    }
+    .colored > option {
+        height:2em;
+        padding: 0.3em;
+    }
+</style>
+<h1>Edit Client</h1>
+<div class="content">
+<form action="{{url}}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input class="button" type="submit" value="Submit">
+</form>
+</div>
+<script>
+    function pickColor(bgColor, lightColor, darkColor) {
+    var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+    var r = parseInt(color.substring(0, 2), 16); // hexToR
+    var g = parseInt(color.substring(2, 4), 16); // hexToG
+    var b = parseInt(color.substring(4, 6), 16); // hexToB
+    return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 186) ?
+        darkColor : lightColor;
+    }
+    select = document.getElementsByClassName('colored')[0]
+    options = document.querySelectorAll('.colored > option');
+    lightColor = 'white';
+    darkColor = 'black';
+    options.forEach(element => {
+        bgColor = element.text;
+        textColor = pickColor(bgColor,lightColor,darkColor);
+        element.style.backgroundColor = bgColor;
+        element.style.color = textColor
+        if(element.selected){
+            style = select.style
+            style.backgroundColor = bgColor
+            style.color = textColor
+        }
+    });
+    select.addEventListener("change",() => {
+        bgColor = select.options[select.selectedIndex].text;
+        style = select.style
+        textColor = pickColor(bgColor,lightColor,darkColor);
+        style.backgroundColor = bgColor
+        style.color = textColor
+    });
+
+</script>
+{% include "footer.html" %}

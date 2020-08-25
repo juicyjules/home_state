@@ -1,0 +1,51 @@
+{% include "head.html" %}
+<style>
+    .color-picker {
+        width:100%;
+    }
+    .pickr .pcr-button {
+        margin-top:0.5em!important;
+        width:100%!important;
+    }
+</style>
+<div class="content">
+<h1>{{head}}</h1>
+<div class="color-picker"></div>
+<form action="{{url}}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input class="button" type="submit" value="Submit">
+</form>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'monolith' theme -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script>
+const pickr = Pickr.create({
+    el: '.color-picker',
+    theme: 'classic', // or 'monolith', or 'nano'
+
+    swatches: [
+    ],
+    default: document.getElementById("id_color").value,
+    components: {
+
+        // Main components
+        preview: true,
+        opacity: true,
+        hue: true,
+
+        // Input / output Options
+        interaction: {
+            input: true,
+            clear: true,
+        }
+    }
+});
+pickr.on('change', (color,instance) => {
+    c = color.toHEXA()
+    document.getElementsByClassName("pcr-button")[0].style.color = c
+    document.getElementById("id_color").value = c.toString()
+});
+
+</script>
+{% include "footer.html" %}
