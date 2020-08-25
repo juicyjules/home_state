@@ -6,6 +6,13 @@ from .forms import ClientForm, ColorProfileForm
 from django.http import JsonResponse
 import re
 # Create your views here.
+def main(req):
+    user = req.user
+    if user.is_authenticated:
+        return HttpResponseRedirect(reverse("master"))
+    else:
+        return HttpResponseRedirect(reverse("login"))
+    
 def master(req):
     user = req.user
     if user.is_authenticated:

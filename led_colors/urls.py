@@ -18,6 +18,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+    path('', views.main, name="main"),
     path('master', views.master, name='master'),
     path('client', views.clients, name='clients'),
     path('color', views.colors, name='colors'),
