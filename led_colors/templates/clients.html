@@ -29,7 +29,7 @@ Off
 </button>
 </div>
 <p>API-Key: <a href="{% url 'clients' %}/{{ client.key }}" class="label">{{ client.key }}</a></p>
-<p> Color: <a href="/leds/color/{{client.current_profile.name}}" class="label">{{client.current_profile}}</a></p>
+<p> Color: <a href="/color/{{client.current_profile.name}}" class="label">{{client.current_profile}}</a></p>
 <div class="color-rect" style="background-color:#{{client.current_profile.color}};"></div>
 {% endfor %}
 </div>
