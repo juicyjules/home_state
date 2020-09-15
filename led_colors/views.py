@@ -9,7 +9,7 @@ import re
 def main(req):
     user = req.user
     if user.is_authenticated:
-        return HttpResponseRedirect(reverse("master"))
+        return  HttpResponseRedirect(reverse("master"))
     else:
         return HttpResponseRedirect(reverse("login"))
     
@@ -33,10 +33,12 @@ def master(req):
                     clean_color = master_color.color
             else:
                 clean_color = master_color.color
+            if on != None:
+                clean_on = on
+                Client.manager.turn_on(user.id,clean_on) 
             master_color.color = clean_color
             master_color.save() 
             Client.manager.set_master_color(user.id,master_color.id)
-            #Client.manager.turn_on(user.id,clean_on)
             return JsonResponse({"message":"success"})
         else:
             all_on = all(map(lambda c: c.on,clients))
