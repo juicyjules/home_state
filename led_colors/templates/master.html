@@ -18,27 +18,35 @@
         max-width:80vw!important;
     }
     .off {
-        filter: grayscale(90);
+        background-color:rgb(117, 26, 45);
+        border-color: rgb(117, 26, 45);
+        margin-right:1em;
+    }
+    .off:hover{
+        color:rgb(117, 26, 45);
+        
+    }
+    .button {
+        flex: 1;
+        width:auto;
     }
 </style>
 <div class="content">
 <h1>Master</h1>
-{% if client.on %}
-<button onclick="toggleOn(this,'master')" class="button on">
-On
+<div style="display:flex">
+<button onclick="turn(this,'master',false)" class="button off">
+    Off
 </button>
-{% else %}
-<button onclick="toggleOn(this,'master')" class="button off">
-Off
+<button onclick="turn(this,'master',true)" class="button on">
+    On
 </button>
-{% endif %}
+</div>
 <div class="color-picker"></div>
 </div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'monolith' theme -->
 <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 <script>
 var cur_color = "{{color}}"
-var on = {% if all_on %} true {% else %} false {% endif %}
 var CSRF_TOKEN = '{{ csrf_token }}'
 const pickr = Pickr.create({
     el: '.color-picker',
@@ -81,24 +89,12 @@ var updateColor = function(color){
     xhr.send('color='+color);
 }
 
-var toggleOn = function(btn,url){
+var turn = function(btn,url,on){
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('X-CSRFToken', CSRF_TOKEN),
-    on = !on
     xhr.send('on='+ ( on ? "True" : "False" ));
-    xhr.onload = function () {
-        if(on){
-            btn.innerHTML = "On"
-            btn.classList.remove("off")
-            btn.classList.add("on")
-        } else {
-            btn.innerHTML = "Off"
-            btn.classList.remove("on")
-            btn.classList.add("off")
-        }
-    };
 };
 </script>
 {% include "footer.html" %}
