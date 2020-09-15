@@ -45,14 +45,14 @@ def master(req):
             print(all_on)
             return render(req,"master.html",{ "name": master_color.name,"color": master_color.color, "url":req.get_full_path(),"all_on": all_on})
     else:
-        return HttpResponse("Not Logged In")
+        return HttpResponseRedirect(reverse("login"))
 def clients(req):
     user = req.user
     if user.is_authenticated:
         clients = Client.manager.clients_for_user_id(user.id)
         return render(req, "clients.html", {'clients' : list(clients)})
     else:
-        return HttpResponse('Not logged in')
+        return HttpResponseRedirect(reverse("login"))
 def colors(req):
     user = req.user
     if user.is_authenticated:
@@ -60,7 +60,8 @@ def colors(req):
         print(profiles)
         return render(req, "colors.html", {'profiles' : list(profiles)})
     else:
-        return HttpResponse('Not logged in')
+        return HttpResponseRedirect(reverse("login"))
+
 def create_client(req):
     user = req.user
     if user.is_authenticated:
@@ -78,7 +79,7 @@ def create_client(req):
             form = ClientForm()
             return render(req, "create_client.html", {'form' : form, "url" : reverse("create_client")})
     else:
-        return HttpResponse("You aint logged in")
+        return HttpResponseRedirect(reverse("login"))
 def client_info(req,key):
     is_uuid = re.compile('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
     if is_uuid.match(key):
@@ -168,4 +169,4 @@ def create_color(req):
             form = ColorProfileForm()
             return render(req, "create_color.html",{'form' : form, "head": "New Color", "url" : req.get_full_path()})
     else:
-        return HttpResponse("You aint logged in")
+        return HttpResponseRedirect(reverse("login"))
