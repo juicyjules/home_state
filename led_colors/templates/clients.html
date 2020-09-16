@@ -16,6 +16,7 @@
 </style>
 <div class="content">
 <h1>Clients</h1>
+<button class="button"><a href="{% url 'master' %}">Master</a></button>
 {% for client in clients %}
 <div class="head-row">
     <h3 style="flex:2;border-left:3px solid #{{client.current_profile.color}};padding-left:0.3em;">{{client.name}} <small style="text-align: right;">by {{client.owner}}</small></h3>
