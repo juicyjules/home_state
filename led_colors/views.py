@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from .models import Client, ColorProfile
 from .forms import ClientForm, ColorProfileForm
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 import re
 # Create your views here.
 def main(req):
@@ -96,6 +98,7 @@ def client_info(req,key):
     else:
         return HttpResponseNotFound("Client does not exist")
 
+@csrf_exempt
 def client_toggle(req,key):
     is_uuid = re.compile('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
     if is_uuid.match(key):
