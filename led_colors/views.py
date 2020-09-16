@@ -5,6 +5,7 @@ from .models import Client, ColorProfile
 from .forms import ClientForm, ColorProfileForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 import re
 # Create your views here.
@@ -111,6 +112,31 @@ def client_toggle(req,key):
         return JsonResponse(data)
     else:
         return HttpResponseNotFound("Client does not exist")
+
+@csrf_exempt
+def master_toggle(req,key):
+    if req.method == "POST":
+        is_uuid = re.compile('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
+        if key == "4ac25e64-6985-46dd-9878-0bae91c48519":
+            try:
+                data = json.loads( req.body.decode('utf-8'))
+            except:
+                return HttpResponse("Wrong JSON")
+            on = data["on"]
+            if on != None and type(on) == bool:
+                clean_on = on
+                Client.manager.turn_on(1,clean_on) 
+                data = {
+                    "on": clean_on
+                }
+            else:
+                data = {
+                    "on": False
+                }
+            return JsonResponse(data)
+        else:
+            return HttpResponseNotFound("wrong Masterkey")
+    return HttpResponseNotFound("no Post")
 
 def client_edit(req,key):
     is_uuid = re.compile('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')

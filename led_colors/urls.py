@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     path('', views.main, name="main"),
     path('master', views.master, name='master'),
+    path('master/<str:key>/toggle', views.master_toggle, name='master_toggle'),
     path('client', views.clients, name='clients'),
     path('color', views.colors, name='colors'),
     path('client/create', views.create_client, name='create_client'),
