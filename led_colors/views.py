@@ -6,6 +6,7 @@ from .forms import ClientForm, ColorProfileForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.utils import timezone
 
 import re
 # Create your views here.
@@ -96,6 +97,7 @@ def client_info(req,key):
             ip = req.META.get('REMOTE_ADDR')
         
         client.ip = str(ip).encode("utf-8")
+        client.last_connection = timezone.now()
         client.save()
         data = {
             'key' : client.key,
