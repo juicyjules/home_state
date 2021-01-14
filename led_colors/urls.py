@@ -29,5 +29,6 @@ urlpatterns = [
     path('client/<str:key>', views.client_edit, name='client_edit'),
     path('color/create', views.create_color, name='create_color'),
     path('color/<str:name>', views.edit_color, name='edit_color'),
+    path('reset', views.reset, name='reset'),
 ]
     
