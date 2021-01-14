@@ -225,17 +225,17 @@ def reset(req):
     user = req.user
     if user.is_authenticated:
         clients = Client.manager.clients_for_user_id(user.id)
-        logger.info(f"Reset for all Clients requested by {user.id}")
+        logger.info("Reset for all Clients requested by "+str(user.id))
         for client in clients:
             if not client.ip:
                 pass
             ip = client.ip.decode("utf-8")
             try:
                 validate_ipv46_address(ip)
-                logger.info(f"SSHing into client {ip}")
-                code = os.system(f"ssh pi@{ip} sudo systemctl restart home-leds.service")
+                logger.info("SSHing into client " + str(ip))
+                code = os.system("ssh pi@"+str(ip)+" sudo systemctl restart home-leds.service")
                 if code:
                     logger.error("Something unexpected happened.")
             except ValidationError:
-                return HttpResponse(f"Client {client.name} has an erroneous IP-Address", status=422)
+                return HttpResponse("Client " + str(client.name) + " has an erroneous IP-Address", status=422)
     return HttpResponse("All clients have received instructions to reset.")
