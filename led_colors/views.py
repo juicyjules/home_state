@@ -83,16 +83,27 @@ def create_client(req):
             return render(req, "create_client.html", {'form' : form, "url" : reverse("create_client")})
     else:
         return HttpResponseRedirect(reverse("login"))
+
 def client_info(req,key):
     is_uuid = re.compile('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
     if is_uuid.match(key):
         client = Client.manager.get_client_for_key(key)
+
+        x_forwarded_for = req.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = req.META.get('REMOTE_ADDR')
+        
+        client.ip = str(ip).encode("utf-8")
+        client.save()
         data = {
             'key' : client.key,
             'name' : client.name,
             'color' : client.current_profile.color if client.current_profile else None ,
             'owner' : str(client.owner),
             'last_connection' : client.last_connection,
+            'ip' : client.ip.decode("utf-8"),
             'on' : client.on
         }
         return JsonResponse(data)
