@@ -104,9 +104,12 @@ def client_info(req,key):
         else:
             ip = req.META.get('REMOTE_ADDR')
         
-        client.ip = str(ip).encode("utf-8")
-        client.last_connection = timezone.now()
-        client.save()
+        ip = str(ip).encode("utf-8")
+        if (client.ip != ip):
+            logger.info(f"Client <{client.name}> IP changed to {ip}!")
+            client.ip = ip
+            client.last_connection = timezone.now()
+            client.save()
         data = {
             'key' : client.key,
             'name' : client.name,
