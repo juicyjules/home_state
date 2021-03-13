@@ -117,7 +117,8 @@ def client_info(req,key):
             'owner' : str(client.owner),
             'last_connection' : client.last_connection,
             'ip' : client.ip.decode("utf-8"),
-            'on' : client.on
+            'on' : client.on,
+            'realtime': client.realtime
         }
         return JsonResponse(data)
     else:

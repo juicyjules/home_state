@@ -26,16 +26,24 @@
         
     }
     .button {
-        flex: 3;
+        flex: 2;
         width:auto;
     }
     .clients {
         flex:2;
         margin-left: 2vw;
-        margin-right:2vw;
     }
+    .realtime {
+        flex:2;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
     @media only screen and (max-width: 960px){
         .clients a {
+            font-size:0.75em;
+        }
+        .realtime a {
             font-size:0.75em;
         }
     }
@@ -47,6 +55,7 @@
     Off
 </button>
 <button class="button clients"><a href="{% url 'clients' %}">Clients</a></button>
+<button class="button realtime  "><a href="{% url 'realtime' '4ac25e64-6985-46dd-9878-0bae91c48519' %}">Realtime</a></button>
 <button onclick="turn(this,'master',true)" class="button on">
     On
 </button>

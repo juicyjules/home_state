@@ -25,7 +25,10 @@ class ClientManager(models.Manager):
         for client in super().get_queryset().filter(owner__id=user_id):
             client.on = on
             client.save()
-
+    def set_realtime(self,user_id,state):
+        for client in super().get_queryset().filter(owner__id=user_id):
+            client.realtime = state
+            client.save()
 class Client(models.Model):
     key = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50)
@@ -34,7 +37,8 @@ class Client(models.Model):
     current_profile = models.ForeignKey(ColorProfile,on_delete=models.DO_NOTHING,null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     on = models.BooleanField(default=False)
-    
+    realtime = models.BooleanField(default=False)
+
     manager = ClientManager()
 
     def __str__(self):
