@@ -21,10 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-with open('/etc/home_state_secret.key') as f:
-    SECRET_KEY = f.read().strip()
-
 # SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = "oy=i$gmy1xmuhk&wl5-#vmry9$$@=g05e%26#&t=9qv^y44#++"
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','stonedstreet.de','home.stonedstreet.de']
@@ -33,15 +31,16 @@ ALLOWED_HOSTS = ['localhost','stonedstreet.de','home.stonedstreet.de']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'channels',
     'users',
     'led_colors',
+    'realtime',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'home_state.wsgi.application'
 # Need this only for Websockets, I'd rather use normal Sockets tbh
-#ASGI_APPLICATION = "home_state.routing.application"
+ASGI_APPLICATION = "home_state.asgi.application"
 
 
 # Database
@@ -87,6 +86,14 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+                "hosts": [('127.0.0.1', 6379)]
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -119,6 +126,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)

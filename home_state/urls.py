@@ -18,6 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('realtime/', include('realtime.urls')),
     path('user/', include('users.urls')),
     path('', include('led_colors.urls')),
 ]
