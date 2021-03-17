@@ -48,8 +48,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 <script>
     const accesskey = "{{ key }}"
+    const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     const socket = new WebSocket(
-        'ws://'
+        ws_scheme + '://'
         + window.location.host
         + '/ws/realtime/'
         + accesskey
