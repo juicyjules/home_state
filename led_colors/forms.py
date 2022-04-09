@@ -35,12 +35,10 @@ class ColorProfileForm(ModelForm):
     def clean_color(self):
         data = self.cleaned_data["color"]
         data = data.strip().replace("#","")
-        print(data)
         if len(data)>8:
             raise ValidationError("Too big anyways")
         try:
             iColor = int(data,16)
-            print(data)
             return data.lower()
         except:
             raise ValidationError("No Hexformat though!")

@@ -54,7 +54,6 @@ def master(req):
             return JsonResponse({"message":"success"})
         else:
             all_on = all(map(lambda c: c.on,clients))
-            print(all_on)
             return render(req,"master.html",{ "name": master_color.name,"color": master_color.color, "url":req.get_full_path(),"all_on": all_on})
     else:
         return HttpResponseRedirect(reverse("login"))
@@ -69,7 +68,6 @@ def colors(req):
     user = req.user
     if user.is_authenticated:
         profiles = ColorProfile.objects.all()
-        print(profiles)
         return render(req, "colors.html", {'profiles' : list(profiles)})
     else:
         return HttpResponseRedirect(reverse("login"))
@@ -184,7 +182,6 @@ def client_edit(req,key):
                 return HttpResponse("Ne das läuft nid")
         else:
             form = ClientForm(instance=client,initial={"profile_choice":client.current_profile})
-            print(req.GET)
             return render(req, "create_client.html", {'form' : form, "url" : req.get_full_path()})
     else:
         return HttpResponseNotFound("Client does not exist")
